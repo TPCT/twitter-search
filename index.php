@@ -14,13 +14,14 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter S
         max-height: 89%;
         border-top: 1px  solid greenyellow;
         border-radius: 5px;
+        overflow: auto;
     }
     pre{
         word-wrap: break-word;
         word-break: break-all;
         max-height: 93%;
         max-width: 99%;
-        overflow-x: hidden;;
+        overflow: auto;
         border: transparent solid 1px;
     }
     form{
