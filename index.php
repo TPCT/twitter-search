@@ -6,7 +6,6 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter S
         outline: none;
     }
     #result{
-        overflow: auto;
         padding:5px ;
         margin-top: 5px;
         width: 99%;
@@ -17,11 +16,11 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter S
         border-radius: 5px;
     }
     pre{
-         word-wrap: break-word;
-         word-break: break-all;
+        word-wrap: break-word;
+        word-break: break-all;
         max-height: 93%;
         max-width: 99%;
-        overflow: auto;
+        overflow-x: hidden;;
         border: transparent solid 1px;
     }
     form{
@@ -73,6 +72,8 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter S
         background: black;
         width: 85%;
         height: 80%;
+        max-width: 70%;
+        max-height: 80%;
     }
     hr{
         line-height: 7px;
@@ -91,7 +92,7 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter S
         Tweeter Search Form
     </legend>
    <center><input placeholder=\"Keyword To search\" type=\"text\" name=\"query\" id=\"query\" />
-            <input type='number' name='number' id='number' min='0' value='0'/>
+            <input type='number' name='number' id='number' min='1' value='1'/>
             <input type='checkbox' name='runtime' id='runtime' value='1'/> runtime
         <input type=\"submit\" id=\"submit\" name=\"submit\" value=\"search\" onclick=\"post();\"/><label id='count'></label> <hr/></center>
     <div id=\"result\"><pre id=\"res\"></pre></div>
