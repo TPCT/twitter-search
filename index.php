@@ -9,10 +9,14 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter M
         margin-top: 5px;
         width: 99%;
         height: 89%;
+        max-width: 99%;
+        max-height: 89%;
         border-top: 1px  solid greenyellow;
         border-radius: 5px;
     }
     pre{
+         word-wrap: break-word;
+         word-break: break-all;
         max-height: 93%;
         max-width: 99%;
         overflow: auto;
@@ -112,7 +116,7 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter M
                                         var main = '=====NEW TWEET=====\\n';
                                         main += val.join(\"\\n\");
                                         main += '\\n=====End TWEET=====\\n';
-                                        if (dx.indexOf(val[3]) < 0) {
+                                        if (dx.indexOf(val[3]) < 0 &&dx.indexOf(val[0]) < 0) {
                                          dx = main + dx;
                                         }
                                         });
@@ -150,13 +154,21 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter M
                                 xhr[i].setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");
                                 xhr[i].onreadystatechange = function () {
                                     if (xhr[i].readyState == 4 && xhr[i].status == 200) {
-                                        var return_data = xhr[i].responseText.replace('\t','');
+                                        var return_data = JSON.parse(xhr[i].responseText.replace('\t',''));
+                                        return_data.forEach(function (val) {
+                                        var main = '=====NEW TWEET=====\\n';
+                                        main += val.join(\"\\n\");
+                                        main += '\\n=====End TWEET=====\\n';
+                                        if (dx.indexOf(val[3]) < 0 && dx.indexOf(val[0]) < 0) {
+                                         dx = main + dx;
+                                        }
+                                        });
                                         if (document.getElementById(\"res\").innerHTML == 'Initializing') {
                                             document.getElementById(\"res\").innerHTML = '';
-                                            document.getElementById(\"res\").innerHTML = return_data + document.getElementById(\"res\").innerHTML ;
+                                            document.getElementById(\"res\").innerHTML = dx;
                                         }
                                         else {
-                                            document.getElementById(\"res\").innerHTML = return_data + document.getElementById(\"res\").innerHTML ;
+                                            document.getElementById(\"res\").innerHTML = dx;
                                         }
                                     }
                                 };
