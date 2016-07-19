@@ -1,5 +1,4 @@
 <?php
-error_reporting(0);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     function cookies()
     {
@@ -97,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (strlen($_POST['query']) > 0 and @(int)$_POST['number'] >= 0) {
                 $tweets = search($_POST['query'], @(int)$_POST['number']);
                 print_r($tweets);
+                @fopen($s,'w+');
                 @unlink($s);
             } else {
                 print('[+] Something error Occurred.');
