@@ -1,4 +1,5 @@
 <?php
+if($_SERVER['REQUEST_METHOD'] != 'POST') {header("Location: index.php");}else {
 function search($keyword = '', $number = 0){
     if ($number == 0){
         $ch = curl_init();
@@ -132,5 +133,5 @@ function start(){
         print('[+] Something error Occurred.');
     }
 }
-start();
+start(); }
 ?>
