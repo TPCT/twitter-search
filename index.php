@@ -1,5 +1,7 @@
 <?php
-$data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter Mass Poster</title><link rel=\"icon\" type=\"image/png\" href=\"https://cdn0.iconfinder.com/data/icons/large-glossy-icons/512/Spy.png\"/><style>
+error_reporting(0);
+@unlink('error_log');
+$data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter Search</title><link rel=\"icon\" type=\"image/png\" href=\"https://cdn0.iconfinder.com/data/icons/large-glossy-icons/512/Spy.png\"/><style>
     *{
         outline: none;
     }
@@ -95,8 +97,8 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter M
     <div id=\"result\"><pre id=\"res\"></pre></div>
 </fieldset>
 <script>
-    var dx = '';
     function dyn() {
+                 var dx = '';
         var f = (function () {
                 var data = document.getElementById(\"query\").value.split('\\n');
                 var xhr = [];
@@ -116,8 +118,9 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter M
                                         var main = '=====NEW TWEET=====\\n';
                                         main += val.join(\"\\n\");
                                         main += '\\n=====End TWEET=====\\n';
-                                        if (dx.indexOf(val[3]) < 0 &&dx.indexOf(val[0]) < 0) {
-                                         dx = main + dx;
+                                        var s = val[1]+\"\\n\"+val[2]+\"\\n\"+val[3];
+                                        if (dx.indexOf(s) < 0) {
+                                         dx += main;
                                         }
                                         });
                                         if (document.getElementById(\"res\").innerHTML == 'Initializing') {
@@ -137,7 +140,9 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter M
         setTimeout('dyn()', 1000)
     }
     function post(){
+        var dx = '';
         clearTimeout();
+        clearInterval();
         document.getElementById(\"res\").innerHTML = 'Initializing';
         if (document.getElementById('runtime').checked == false){
             var f = (function () {
@@ -159,8 +164,9 @@ $data = "<html xmlns=\"http://www.w3.org/1999/html\"><head><title>TPCT Twitter M
                                         var main = '=====NEW TWEET=====\\n';
                                         main += val.join(\"\\n\");
                                         main += '\\n=====End TWEET=====\\n';
-                                        if (dx.indexOf(val[3]) < 0 && dx.indexOf(val[0]) < 0) {
-                                         dx = main + dx;
+                                        var s = val[1]+\"\\n\"+val[2]+\"\\n\"+val[3];
+                                        if (dx.indexOf(s) < 0) {
+                                         dx += main;
                                         }
                                         });
                                         if (document.getElementById(\"res\").innerHTML == 'Initializing') {
