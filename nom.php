@@ -18,34 +18,36 @@ function search($keyword = '', $number = 0){
         $doc = new DOMDocument();
         $doc->loadHTML($page);
         $find = new DOMXPath($doc);
-        $refresh = $find->query('//td[@class="r"]');
-        if ($refresh->length > 0){
-            foreach ($refresh as $re){
-                foreach($re->childNodes as $r){
-                    if ($r->nodeName == 'a'){
-                        $refresh_url  = 'https://m.twitter.com'.($r->getAttribute('href'));
-                        break;
+        while($find->query('//div[@class="noresults"]')->length == 0){
+            $refresh = $find->query('//td[@class="r"]');
+            if ($refresh->length > 0){
+                foreach ($refresh as $re){
+                    foreach($re->childNodes as $r){
+                        if ($r->nodeName == 'a'){
+                            $refresh_url  = 'https://m.twitter.com'.($r->getAttribute('href'));
+                            break;
+                        }
                     }
                 }
             }
-        }
-        curl_setopt($ch, CURLOPT_URL, $refresh_url);
-        curl_exec($ch);
-        $page = curl_exec($ch);
-        $doc = new DOMDocument();
-        $doc->loadHTML($page);
-        $find = new DOMXPath($doc);
-        $tweets = $find->query('//td[@class="tweet-content"]');
-        $userinfo = $find->query('//td[@class="user-info"]');
-        $timestamp = $find->query('//td[@class="timestamp"]');
-        for ($i=0;$i<= $tweets->length-1; $i++){
-            $t = [];
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'User-Data: '.$userinfo[$i]->textContent)));
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Timestamp-Data: '.$timestamp[$i]->textContent)));
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Url: https://www.twitter.com'.$timestamp[$i]->childNodes[1]->getAttribute('href'))));
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Data: '.$tweets[$i]->textContent)));
-            if (!in_array($t, $data)){
-                $data[] = $t;
+            curl_setopt($ch, CURLOPT_URL, $refresh_url);
+            curl_exec($ch);
+            $page = curl_exec($ch);
+            $doc = new DOMDocument();
+            $doc->loadHTML($page);
+            $find = new DOMXPath($doc);
+            $tweets = $find->query('//td[@class="tweet-content"]');
+            $userinfo = $find->query('//td[@class="user-info"]');
+            $timestamp = $find->query('//td[@class="timestamp"]');
+            for ($i=0;$i<= $tweets->length-1; $i++){
+                $t = [];
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Timestamp-Data: '.$timestamp[$i]->textContent)));
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'User-Data: '.$userinfo[$i]->textContent)));
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Url: https://www.twitter.com'.$timestamp[$i]->childNodes[1]->getAttribute('href'))));
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Data: '.$tweets[$i]->textContent)));
+                if (!in_array($t, $data)){
+                    $data[] = $t;
+                }
             }
         }
         return json_encode($data);
@@ -84,17 +86,19 @@ function search($keyword = '', $number = 0){
         $doc = new DOMDocument();
         $doc->loadHTML($page);
         $find = new DOMXPath($doc);
-        $tweets = $find->query('//td[@class="tweet-content"]');
-        $userinfo = $find->query('//td[@class="user-info"]');
-        $timestamp = $find->query('//td[@class="timestamp"]');
-        for ($i=0;$i<= $tweets->length-1; $i++){
-            $t = [];
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'User-Data: '.$userinfo[$i]->textContent)));
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Timestamp-Data: '.$timestamp[$i]->textContent)));
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Url: https://www.twitter.com'.$timestamp[$i]->childNodes[1]->getAttribute('href'))));
-            @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Data: '.$tweets[$i]->textContent)));
-            if (!in_array($t, $data)){
-                $data[] = $t;
+        while($find->query('//div[@class="noresults"]')->length == 0){
+            $tweets = $find->query('//td[@class="tweet-content"]');
+            $userinfo = $find->query('//td[@class="user-info"]');
+            $timestamp = $find->query('//td[@class="timestamp"]');
+            for ($i=0;$i<= $tweets->length-1; $i++){
+                $t = [];
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Timestamp-Data: '.$timestamp[$i]->textContent)));
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'User-Data: '.$userinfo[$i]->textContent)));
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Url: https://www.twitter.com'.$timestamp[$i]->childNodes[1]->getAttribute('href'))));
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Data: '.$tweets[$i]->textContent)));
+                if (!in_array($t, $data)){
+                    $data[] = $t;
+                }
             }
         }
         for ($i = 0; $i<$number; $i++){
@@ -109,8 +113,8 @@ function search($keyword = '', $number = 0){
             $timestamp = $find->query('//td[@class="timestamp"]');
             for ($x=0;$x<= $tweets->length-1; $x++){
                 $t = [];
-                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'User-Data: '.$userinfo[$x]->textContent)));
                 @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Timestamp-Data: '.$timestamp[$x]->textContent)));
+                @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'User-Data: '.$userinfo[$x]->textContent)));
                 @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Url: https://www.twitter.com'.$timestamp[$x]->childNodes[1]->getAttribute('href'))));
                 @$t[] = preg_replace('/\s+/', ' ',str_ireplace("\t", '', str_ireplace("\n", '', 'Tweet-Data: '.$tweets[$x]->textContent)));
                 if (!in_array($t, $data)){
